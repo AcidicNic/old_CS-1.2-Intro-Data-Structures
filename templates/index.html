@@ -1,5 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
+    <header class="masthead header_custom">
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col text-center">
+                    <h1 class="h1_custom m-0 display-4">Tweet Generator</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+    <section class="py-3 card-center">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Generator Name</h4>
+                <p class="card-text">short description of the generator.</p>
+                <a href='show_generator.html'><button class="btn btn-success m-right" type="button">Begin</button></a>
+                <a href='#'><button class="btn btn-secondary m-right" type="button">Edit</button></a>
+            </div>
+        </div>
+    </section>
 {% endblock %}

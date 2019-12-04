@@ -34,7 +34,6 @@ class Histogram():
             then returns an ordered list of tuples.
         '''
         if isinstance(source_text, str):
-            source_text = source_text.replace("-", " ").lower()
             word_list = source_text.split()
         elif isinstance(source_text, list):
             word_list = source_text
@@ -149,19 +148,25 @@ class Histogram():
             return None
         return words
 
-    def sample_by_frequency(self, selection=None):
+    def sample_by_frequency(self, limit=1):
         ''' Select a word based on frequency '''
         # TODO: optimize. for loop to count total range (to pick random number) and for loop that returns when it's in range
-        if selection is None:
+        words = []
+        for i in range(limit):
+            print(f"i = {i}")
             selection = randrange(0, self.total_tokens)
-        total = 0
-        for word, count in self.histogram.items():
-            total += count
-            if selection <= total:
-                if word is not None:
-                    return word
-                else:
-                    self.sample_by_frequency()
+            total = 0
+            for word, count in self.histogram.items():
+                total += count
+                if selection <= total:
+                    if word is not None:
+                        words.append(word)
+                        break
+                    else:
+                        return 0
+        if len(words) > 1:
+            return words
+        return words[0]
 
     def markov(self):
         word_pairs = {}

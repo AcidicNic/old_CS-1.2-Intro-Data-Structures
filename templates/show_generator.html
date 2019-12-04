@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <header class="masthead header_custom">
+        <div class="container-fluid h-100">
+            <div class="row justify-content-center align-items-center h-100">
+                <div class="col text-center">
+                    <h1 class="h1_custom m-0 display-4">Generator Name</h1>
+                    <p class="card-text">short description of the generator.</p>
+                    <a href='/'><button class="btn btn-success m-right" type="button">Reload Tweet</button></a>
+                    <button class="btn btn-secondary" type="button">Edit</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="py-3 card-center">
+        <div class="card">
+            <div class="card-body generator-box">
+                <p style="padding-left: 20%; padding-right: 20%">{{  }}}</p>
+                <button type="button" class="btn btn-primary">Favorite</button>
+            </div>
+        </div>
+    </section>
+{% endblock %}
