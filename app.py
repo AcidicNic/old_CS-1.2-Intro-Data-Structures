@@ -8,14 +8,24 @@ import os
 # import word_count
 # import sample
 # import sentence
-from frequency import Histogram
+from frequency import *
+# from werkzeug.utils import secure_filename
+#
+# UPLOAD_FOLDER = '/uploads'
+# ALLOWED_EXTENSIONS = {'txt', ''}
+
+app = Flask(__name__)
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 #with heroku
-host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/TweetGen')
-client = MongoClient(host=f'{host}?retryWrites=false')
-db = client.get_default_database()
+# host = os.environ.get('MONGODB_URI', 'mongodb://localhost:27017/TweetGen')
+# client = MongoClient(host=f'{host}?retryWrites=false')
+# db = client.get_default_database()
 
-histograms = db.histograms
+client = MongoClient()
+db = client.TweetGen
+
+generators = db.generators
 favorites = db.favorites
 
 app = Flask(__name__)
@@ -24,29 +34,55 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
 def index():
     ''' show all histograms '''
-    return render_template('index.html', histograms=histograms.find())
+    return render_template('index.html', generators=generators.find(), title='Tweet Generator')
 
 
-@app.route('/histograms', methods=['POST', 'GET'])
+@app.route('/generator', methods=['POST', 'GET'])
 def histogram_saved():
     text = request.form.get('source_text')
-    histogram = Histogram(str(text))
-    new_histogram = {
-        'histogram': histogram.histogram,
-        'types': histogram.total_types,
-        'tokens': histogram.total_tokens,
-        'random_words': histogram.sample_by_frequency(10),
-        'markov_dict': histogram.markov_chain
+    name = request.form.get('name')
+    desc = request.form.get('desc')
+
+    generator = Histogram(str(text))
+    new_generator = {
+        'name': name,
+        'description': desc,
+        'word_list': generator.word_list,
+        'histogram': generator.histogram,
+        'types': generator.total_types,
+        'tokens': generator.total_tokens,
+        'random_words': bulk_sample(generator.histogram, generator.total_tokens, 10),
+        'markov_dict': generator.markov_chain,
+        'random_sentence': random_sentence(generator.markov_chain)
     }
-    # histogram_id = histograms.insert_one(new_histogram).inserted_id
-    histograms.insert_one(new_histogram)
+    generator_id = generators.insert_one(new_generator).inserted_id
+    return redirect(url_for('show_generator', generator_id=generator_id))
+
+
+@app.route('/generator/<generator_id>')
+def show_generator(generator_id):
+    generator = generators.find_one({'_id': ObjectId(generator_id)})
+    generator['random_words'] = bulk_sample(generator['histogram'], generator['tokens'], 10)
+    generator['random_sentence'] = random_sentence(generator['markov_dict'])
+    return render_template('show_generator.html', generator=generator, title=generator['name'])
+
+
+@app.route('/generator/<generator_id>/edit')
+def edit_generator(generator_id):
+    generator = generators.find_one({'_id': ObjectId(generator_id)})
+    return render_template('edit_form.html', generator=generator, title='Edit Generator')
+
+
+@app.route('/generator/<generator_id>/delete', methods=['POST'])
+def remove_generator(generator_id):
+    generators.delete_one({'_id': ObjectId(generator_id)})
     return redirect(url_for('index'))
 
 
 @app.route('/create')
 def create_histogram():
     ''' form to create a generator '''
-    return render_template('sourcetext_form.html', histogram={})
+    return render_template('sourcetext_form.html', generator={})
 
 
 if __name__ == '__main__':

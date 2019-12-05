@@ -10,14 +10,16 @@
             </div>
         </div>
     </header>
+
+    {% for generator in generators %}
     <section class="py-3 card-center">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Generator Name</h4>
+                <h4 class="card-title">{{ generator.name }}</h4>
                 <p class="card-text">short description of the generator.</p>
-                <a href='show_generator.html'><button class="btn btn-success m-right" type="button">Begin</button></a>
-                <a href='#'><button class="btn btn-secondary m-right" type="button">Edit</button></a>
+                <button class="btn btn-success m-right" type="button" onclick="location.href='/generator/{{ generator._id }}';">Begin</button>
             </div>
         </div>
     </section>
+    {% endfor %}
 {% endblock %}

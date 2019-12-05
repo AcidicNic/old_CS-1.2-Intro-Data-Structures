@@ -5,10 +5,11 @@
         <div class="container-fluid h-100">
             <div class="row justify-content-center align-items-center h-100">
                 <div class="col text-center">
-                    <h1 class="h1_custom m-0 display-4">Generator Name</h1>
-                    <p class="card-text">short description of the generator.</p>
-                    <a href='/'><button class="btn btn-success m-right" type="button">Reload Tweet</button></a>
-                    <button class="btn btn-secondary" type="button">Edit</button>
+                    <h1 class="h1_custom m-0 display-4">{{ generator.name }}</h1>
+                    <p class="card-text">{{ generator.description }}</p>
+                    <button class="btn btn-success m-right" type="button" onclick="location.href='/generator/{{ generator._id }}';">Reload</button>
+                    <button class="btn btn-secondary m-right" onclick="location.href='/generator/{{ generator._id }}/edit';" type="button">Edit</button>
+                    <button class="btn btn-danger" type='submit' form='delete_form'>Delete</button>
                 </div>
             </div>
         </div>
@@ -17,9 +18,23 @@
     <section class="py-3 card-center">
         <div class="card">
             <div class="card-body generator-box">
-                <p style="padding-left: 20%; padding-right: 20%">{{  }}}</p>
+                <p style="padding-left: 20%; padding-right: 20%">
+                    {% for word in generator.random_words %}
+                        {{ word }}
+                    {% endfor %}
+                </p>
+                <p style="padding-left: 20%; padding-right: 20%">
+                    {% for word in generator.random_sentence %}
+                        {{ word }}
+                    {% endfor %}
+                </p>
+                <p style="padding-left: 20%; padding-right: 20%">{{ generator.markov_dict }}</p>
                 <button type="button" class="btn btn-primary">Favorite</button>
             </div>
         </div>
     </section>
+
+    <form method='POST' id='delete_form' action='/generator/{{generator._id}}/delete'>
+        <input type='hidden' name='_method' value='DELETE'>
+    </form>
 {% endblock %}
