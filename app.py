@@ -51,7 +51,6 @@ def histogram_saved():
         'histogram': generator.histogram,
         'types': generator.total_types,
         'tokens': generator.total_tokens,
-        'random_words': bulk_sample(generator.histogram, generator.total_tokens, 10),
         'markov_dict': generator.markov_chain,
         'random_sentence': random_sentence(generator.markov_chain)
     }
@@ -62,7 +61,7 @@ def histogram_saved():
 @app.route('/generator/<generator_id>')
 def show_generator(generator_id):
     generator = generators.find_one({'_id': ObjectId(generator_id)})
-    generator['random_words'] = bulk_sample(generator['histogram'], generator['tokens'], 10)
+    # generator['random_words'] = bulk_sample(generator['histogram'], generator['tokens'], 10)
     generator['random_sentence'] = random_sentence(generator['markov_dict'])
     return render_template('show_generator.html', generator=generator, title=generator['name'])
 
@@ -71,6 +70,28 @@ def show_generator(generator_id):
 def edit_generator(generator_id):
     generator = generators.find_one({'_id': ObjectId(generator_id)})
     return render_template('edit_form.html', generator=generator, title='Edit Generator')
+
+
+@app.route('/generator/<generator_id>', methods=['POST'])
+def update_generator(generator_id):
+    text = request.form.get('source_text')
+    name = request.form.get('name')
+    desc = request.form.get('desc')
+
+    generator = Histogram(str(text))
+    updated_generator = {
+        'name': name,
+        'description': desc,
+        'word_list': generator.word_list,
+        'histogram': generator.histogram,
+        'types': generator.total_types,
+        'tokens': generator.total_tokens,
+        'markov_dict': generator.markov_chain,
+    }
+    generators.update_one(
+        {'_id': ObjectId(generator_id)},
+        {'$set': updated_generator})
+    return redirect(url_for('show_generator', generator_id=generator_id))
 
 
 @app.route('/generator/<generator_id>/delete', methods=['POST'])

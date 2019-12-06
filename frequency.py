@@ -208,14 +208,13 @@ def markov(word_list):
         word_pairs[word] = get_histogram(word_pairs[word], 'SL')
     return word_pairs
 
-def random_sentence(markov, min=8):
+def random_sentence(markov, min=4, max=20):
     sentence = []
     sentence.append(sample_by_frequency(markov['__start__'], get_total_tokens(markov['__start__'])))
-    # if markov['__end__'] is None:
-    #     return 0
     while True:
         next_word = sample_by_frequency(markov[sentence[-1]], get_total_tokens(markov[sentence[-1]]))
-        if next_word == '__end__' and len(sentence) >= min:
+        print(next_word)
+        if next_word == '__end__' and len(sentence) >= min or len(sentence) >= max:
             return sentence
         elif not next_word == '__end__':
             sentence.append(next_word)

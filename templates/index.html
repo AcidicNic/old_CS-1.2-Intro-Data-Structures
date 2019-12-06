@@ -11,6 +11,7 @@
         </div>
     </header>
 
+{% if generators %}
     {% for generator in generators %}
     <section class="py-3 card-center">
         <div class="card">
@@ -22,4 +23,5 @@
         </div>
     </section>
     {% endfor %}
+{% endif %}
 {% endblock %}

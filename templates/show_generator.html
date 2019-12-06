@@ -18,17 +18,17 @@
     <section class="py-3 card-center">
         <div class="card">
             <div class="card-body generator-box">
-                <p style="padding-left: 20%; padding-right: 20%">
-                    {% for word in generator.random_words %}
-                        {{ word }}
-                    {% endfor %}
-                </p>
-                <p style="padding-left: 20%; padding-right: 20%">
+<!--                <p style="padding-left: 20%; padding-right: 20%"> <strong>10 Randomly Sampled Words: </strong>-->
+<!--                    {% for word in generator.random_words %}-->
+<!--                        {{ word }}-->
+<!--                    {% endfor %}-->
+<!--                </p>-->
+                <p style="padding-left: 20%; padding-right: 20%"> <strong>Generated Text: </strong>
                     {% for word in generator.random_sentence %}
                         {{ word }}
                     {% endfor %}
                 </p>
-                <p style="padding-left: 20%; padding-right: 20%">{{ generator.markov_dict }}</p>
+<!--                <p style="padding-left: 20%; padding-right: 20%">{{ generator.markov_dict }}</p>-->
                 <button type="button" class="btn btn-primary">Favorite</button>
             </div>
         </div>

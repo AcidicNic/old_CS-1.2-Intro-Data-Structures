@@ -16,14 +16,14 @@
         <div class="card-body">
             <div class="form-group">
                 <form method='POST' action='/generator'>
-                    <div>
+                    <div class="form-div">
                         <label class="form-label" for="gen-title">Name Your Generator</label><br>
-                        <input type="text" name='name' id="gen-title" class="gen-title form-control" value='{{ generator.name }}' required/>
+                        <input type="text" name='name' id="gen-title" class="gen-title form-control" required/>
                     </div>
 
-                    <div>
+                    <div class="form-div">
                         <label class="form-label" for="gen-desc">Now Give it a Short Description</label><br>
-                        <input type="text" name='desc' id="gen-desc" class="gen-title form-control" value='{{ generator.description }}' required/>
+                        <input type="text" name='desc' id="gen-desc" class="gen-title form-control"/>
                     </div>
 
 <!--                    <div class="form-div">-->
@@ -36,7 +36,7 @@
 
                     <div class="form-div">
                         <label class="form-label" for="source-textarea">Enter Your Source Text</label><br>
-                        <textarea id="source-textarea" type="text" name='source_text' class="source-textarea form-control" required>{{ generator.source_text }}</textarea>
+                        <textarea id="source-textarea" type="text" name='source_text' class="source-textarea form-control" required></textarea>
                     </div>
                     <div class="form-div m-top" style="text-align: center;">
                         <button class="btn btn-success btn-submit" type="submit">Submit!</button>
